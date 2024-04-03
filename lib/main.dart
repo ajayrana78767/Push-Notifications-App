@@ -1,9 +1,32 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() => runApp(const MyApp());
+FlutterLocalNotificationsPlugin notificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  AndroidInitializationSettings androidSettings =
+      const AndroidInitializationSettings("@mipmap/launcher_icon");
+
+  DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestCriticalPermission: true,
+    requestProvisionalPermission: true,
+    requestSoundPermission: true,
+  );
+  InitializationSettings initializationSettings =
+      InitializationSettings(android: androidSettings, iOS: iosSettings);
+  bool? initialized =
+      await notificationsPlugin.initialize(initializationSettings);
+  log('Notifications :$initialized');
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -42,7 +65,10 @@ class _FlutterTimeDemoState extends State<FlutterTimeDemo> {
       appBar: AppBar(
         backgroundColor: Colors.pinkAccent,
         centerTitle: true,
-        title: const Text('Push Notifications',style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'Push Notifications',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
         child: Text(
