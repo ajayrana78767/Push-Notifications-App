@@ -59,6 +59,28 @@ class _FlutterTimeDemoState extends State<FlutterTimeDemo> {
     super.initState();
   }
 
+  void showNotifications() async {
+    AndroidNotificationDetails androidDetails =
+        const AndroidNotificationDetails(
+      'notifications-youtube',
+      'Youtube Notifications',
+      enableLights: true,
+      priority: Priority.max,
+      importance: Importance.max,
+    );
+    DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+    NotificationDetails notiDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+    await notificationsPlugin.show(
+        0, 'sample notification', 'This is a notification', notiDetails);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +97,10 @@ class _FlutterTimeDemoState extends State<FlutterTimeDemo> {
           _timeString,
           style: const TextStyle(fontSize: 30),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: showNotifications,
+        child: const Icon(Icons.notification_add),
       ),
     );
   }
